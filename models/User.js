@@ -29,11 +29,11 @@ const UserSchema = new mongoose.Schema(
             type:String,
             default:"",
         },
-        followrs:{
+        followers:{
             type:Array,     //because we are going to keep users ids inside of this 
             default:[],
         },
-        followins:{
+        followings:{
             type:Array,     //because we are going to keep users ids inside of this 
             default:[],
         },
