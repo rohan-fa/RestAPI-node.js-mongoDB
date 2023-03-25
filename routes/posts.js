@@ -73,22 +73,22 @@ router.get("/:id", async(req,res)=>{
     }
 })
 //get timeline posts
-router.get("/timeline/all", async(req,res)=>{
+router.get("/timeline/:userId", async(req,res)=>{
 
     try {
         //we are going to do something different here, instead of await=> we will use promise because we will have multiple promises,
         //firstly we will find the current user, 
-        const currentUser = await User.findById(req.body.userId);
+        const currentUser = await User.findById(req.params.userId);
         //after that we will find all posts of this current user, to this postArray, 
         const userPosts = await Post.find({ userId: currentUser._id}); //becasue in the post model we have user id here means PostSchema, we will just try to find all post of this user
         //after that find all post of this followings, Promise.all()=> because will use map here
         const friendPosts = await Promise.all(
             currentUser.followings.map((friendId) => {
-                return Post.find({userId: friendId});   //retuen because it going to returen each post in this array
+                return Post.find({userId: friendId});   //retuen because it going to returen each post in this array 
             })
         );
         //now we can concat this two array's
-        res.json(userPosts.concat(...friendPosts)); //its going to take all posts from friend, and concat with this post
+        res.status(200).json(userPosts.concat(...friendPosts)); //its going to take all posts from friend, and concat with this post
     } catch (err) {
         res.status(500).json(err)
     }
